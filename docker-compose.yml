@@ -9,6 +9,7 @@ version: '3'
 services:
   janus:
     image: janusgraph:0.2.0-hadoop2
+    restart: always
     build:
       dockerfile: Dockerfile.janus
       args:
@@ -23,6 +24,7 @@ services:
       - index
   db:
     image: scylladb/scylla:2.0.1
+    restart: always
     ports:
      # http://docs.scylladb.com/kb/posix/
      # REST API
@@ -43,6 +45,7 @@ services:
      - ./data/scylla/data:/var/lib/scylla
   index:
     image: elasticsearch:5
+    restart: always
     ports:
      - "9200:9200"
      - "9300:9300"
