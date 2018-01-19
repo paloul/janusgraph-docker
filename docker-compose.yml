@@ -8,8 +8,8 @@ version: '3'
 
 services:
   janus:
-    image: janusgraph:0.2.0-hadoop2
     restart: always
+    image: janusgraph:0.2.0-hadoop2
     build:
       dockerfile: Dockerfile.janus
       args:
@@ -20,11 +20,11 @@ services:
       - "8182:8182"
       - "8184:8184"
     depends_on:
-      - db
-      - index
-  db:
-    image: scylladb/scylla:2.0.1
+      - janus_db
+      - janus_index
+  janus_db:
     restart: always
+    image: scylladb/scylla:2.0.1
     ports:
      # http://docs.scylladb.com/kb/posix/
      # REST API
@@ -42,12 +42,12 @@ services:
      - "9180:9180"
      - "9100:9100"
     volumes:
-     - ./data/scylla/data:/var/lib/scylla
-  index:
-    image: elasticsearch:5
+     - ./data/janus-db-data:/var/lib/scylla
+  janus_index:
     restart: always
+    image: elasticsearch:5
     ports:
      - "9200:9200"
      - "9300:9300"
     volumes:
-     - ./data/elasticsearch/data:/usr/share/elasticsearch/data
+     - ./data/janus-index-data:/usr/share/elasticsearch/data
